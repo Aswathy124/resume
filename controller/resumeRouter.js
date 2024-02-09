@@ -26,4 +26,6 @@ router.post("/signup",async(req,res)=>{
 res.json({status:"sucessfully signuped"})
 })
 
+
+
 module.exports=router

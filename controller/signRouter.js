@@ -15,6 +15,8 @@ router.post("/add",async(req,res)=>
         
     })
 })
+
+
 router.get("/viewall",async(req,res)=>{
     let data=await signmodel.find()
     .populate("userid","name age mobile address mark email -_id")
