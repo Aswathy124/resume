@@ -1,26 +1,24 @@
 const express=require("express")
-const signmodel=require("../models/signmodel")
-const router=express.Router()
+const resumemodel=require("../models/resumemodel")
+const route=express.Router()
 
-router.post("/add",async(req,res)=>
+route.post("/add",async(req,res)=>
 {
     let data=req.body
-    let post=new signmodel(data)
-    let result=post.save()
-    res.json({
-        
-            
-                status:"sucess"
-            
-        
-    })
+    let resume=new resumemodel(data)
+    let result=resume.save()
+
+    res.json({status:"success"})
 })
 
-
-router.get("/viewall",async(req,res)=>{
-    let data=await signmodel.find()
-    .populate("userid","name age mobile address mark email -_id")
+route.get("/viewall",async(req,res)=>{
+    let data=await resumemodel.find()
+    .populate("userid","name address phone experience postgraduation graduation plustwo tenth certifications extracaricular -_id ")
     .exec()
     res.json(data)
 })
-module.exports=router
+
+module.exports=route
+
+
+

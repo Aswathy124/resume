@@ -13,7 +13,7 @@ const resumeschema=new mongoose.Schema(
 }
 
 )
-module.exports=mongoose.model("users",resumeschema)
+module.exports=mongoose.model("resume",resumeschema)
 
 
 
