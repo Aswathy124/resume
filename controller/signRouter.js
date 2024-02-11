@@ -1,26 +1,46 @@
 const express=require("express")
 const signmodel=require("../models/signmodel")
-const router=express.Router()
+const route=express.Router()
+const bcrypt=require("bcryptjs")
+hashpasswordgenerator=async(pass)=>{
+    const salt=await bcrypt.genSalt(10)
+    return bcrypt.hash(pass,salt)
+}
 
-router.post("/add",async(req,res)=>
-{
-    let data=req.body
-    let post=new signmodel(data)
-    let result=post.save()
-    res.json({
-        
-            
-                status:"sucess"
-            
-        
-    })
+route.post("/signup",async(req,res)=>{
+    let {data}={"data":req.body}
+    let password=data.password
+    const hashedpassword=await hashpasswordgenerator(password)
+    data.password=hashedpassword
+    let sign=new signmodel(data)
+    let result=sign.save()
+    res.json({status:"success"})
+})
+
+route.post("/signin",async(req,res)=>{
+    let input=req.body
+    let email=req.body.email
+    let data=await signmodel.findOne({"email":email})
+
+    if(!data)
+    {
+        return res.json({status:"incorrect email id"})
+    }
+
+    console.log(data)
+    let dbPassword=data.password
+    let inputPassword=req.body.password
+
+    const match=await bcrypt.compare(inputPassword,dbPassword)
+
+    if(!match)
+    {
+        return res.json({status:"incorrect password"})
+    }
+
+    res.json({status:"success"})
+
 })
 
 
-router.get("/viewall",async(req,res)=>{
-    let data=await signmodel.find()
-    .populate("userid","name age mobile address mark email -_id")
-    .exec()
-    res.json(data)
-})
-module.exports=router
+module.exports=route
